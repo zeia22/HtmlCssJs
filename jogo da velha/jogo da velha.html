@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-tac-toe</title>
+    <style>
+        * {
+            font-size: 85px;
+            margin: 0%;
+            padding: 0%;
+            font-family: "Poppins", sans-serif;
+            background-color: #069;
+            color: white;
+        }
+        #titulo {
+            font-size: 50px;
+            margin-top: 45px;
+            text-align: center;
+        }
+        #casas {
+            width: 600px;
+            margin-left: 385px;
+            text-align: center;
+        }
+        #sup, #mei, #inf {
+            margin-left: 43%;
+        }
+        #sup {
+            border-bottom: 5px solid white;
+            width: 290px;
+            margin-top: 10%;
+        }
+        #mei {
+            border-bottom: 5px solid white;
+            width: 290px;
+        }
+        #inf {
+            margin-right: 51px;
+        }
+        .dir {
+            border-left: 5px solid white;
+            padding-left: 10px;
+        }
+        .esq {
+            border-right: 5px solid white;
+            padding-right: 10px;
+        }
+        #recomecar {
+            text-align: center;
+        }
+        #buttonRecomecar {
+            font-size: 25px;
+            width: 200px;
+        }
+        #jogador1 {
+            position: absolute;
+            margin-left: 1%;
+            background-color: transparent;
+        }
+        #nomeJogador1 {
+            width: 110px;
+            font-size: 25px;
+            text-align: center;
+        }
+        #pontuacaoJogador1 {
+            text-align: center;
+            margin-left: 30px;
+        }
+        #quemSouJogador1 {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            margin-left: 30px;
+        }
+        #jogador2 {
+            position: absolute;
+            margin-left: 91.6%;
+            background-color: transparent;
+        }
+        #nomeJogador2 {
+            width: 110px;
+            font-size: 25px;
+            text-align: center;
+        }
+        #pontuacaoJogador2 {
+            text-align: center;
+            margin-left: 30px;
+        }
+        #quemSouJogador2 {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            margin-left: 30px;
+        }
+    </style>
+</head>
+<body id="body">
+    <div id="all">
+        <h1 id="titulo">Jogo da velha</h1>
+        <div id="jogador1">
+        <input type="text" id="nomeJogador1" value="Jogador 1"></input>
+        <br />
+        <span id="pontuacaoJogador1">0</span>
+        <br />
+        <select id="quemSouJogador1">
+            <option value="X">X</option>
+            <option value="O">O</option>
+        </select>
+    </div>
+    <div id="jogador2">
+        <input type="text" id="nomeJogador2" value="Jogador 2"></input>
+        <br />
+        <span id="pontuacaoJogador2">0</span>
+        <br />
+        <select id="quemSouJogador2">
+            <option value="O">O</option>
+            <option value="X">X</option>
+        </select>
+    </div>
+    <div id="casas">
+        <div id="sup">
+    <span id="supEsq" class="esq" onclick="jogar(`supEsq`)">--</span>
+    <span id="supMei" onclick="jogar(`supMei`)">--</span>
+    <span id="supDir" class="dir" onclick="jogar(`supDir`)">--</span>
+        </div>
+        <div id="mei">
+    <span id="meiEsq" class="esq" onclick="jogar(`meiEsq`)">--</span>
+    <span id="meiMei" onclick="jogar(`meiMei`)">--</span>
+    <span id="meiDir" class="dir" onclick="jogar(`meiDir`)">--</span>
+</div>
+    <div id="inf">
+    <span id="infEsq" class="esq" onclick="jogar(`infEsq`)">--</span>
+    <span id="infMei" onclick="jogar(`infMei`)">--</span>
+    <span id="infDir" class="dir" onclick="jogar(`infDir`)">--</span>
+</div>
+</div>
+<br />
+<div id="recomecar">
+<button id="buttonRecomecar" onclick="recomecar()">Recomeçar</button>
+</div>
+</div>
+</body>
+<script>
+    var quemJoga = 1;
+    var simboloQuemJoga;
+    var pontosJogador1 = 0;
+    var pontosJogador2 = 0;
+    function identificarQuemJoga() {
+        if(quemJoga % 2 == 0) {
+            simboloQuemJoga = document.getElementById("quemSouJogador2").value;
+            quemJoga = quemJoga + 1;
+        } else { 
+        simboloQuemJoga = document.getElementById("quemSouJogador1").value;
+        quemJoga = quemJoga + 1;
+     }
+        return simboloQuemJoga;
+    }
+    function jogar(onde) {
+        //verificar se o símbolo já foi trocado
+        var valueSpan = document.getElementById(onde).innerText;
+        if((valueSpan == "X") || (valueSpan == "O")) {
+            return alert("Escolha uma casa válida!");
+        }
+        var simbolo = identificarQuemJoga();
+        //trocar símbolo
+        document.getElementById(onde).innerHTML = simbolo;
+        alguemGanhou();
+    }
+    function recomecar() {
+        var all = ["supEsq", "supMei", "supDir", "meiEsq", "meiMei", "meiDir", "infEsq", "infMei", "infDir"];
+        for(onde of all) { document.getElementById(onde).innerHTML = "--"; }
+        quemJoga = 1; }
+    function mostrarPontosERecomecar() {
+        document.getElementById("pontuacaoJogador1").innerHTML = pontosJogador1;
+        document.getElementById("pontuacaoJogador2").innerHTML = pontosJogador2;
+        recomecar();
+    }
+    function destacar(onde1, onde2, onde3) {
+        document.getElementById(onde1).style.color = "pink";
+        document.getElementById(onde2).style.color = "pink";
+        document.getElementById(onde3).style.color = "pink";
+        setTimeout(function() {
+        document.getElementById(onde1).style.color = "white";
+        document.getElementById(onde2).style.color = "white";
+        document.getElementById(onde3).style.color = "white";
+        },1500);
+    }
+    function alguemGanhou() {
+        var supEsq = document.getElementById("supEsq").innerText;
+        var supMei = document.getElementById("supMei").innerText;
+        var supDir = document.getElementById("supDir").innerText;
+        var meiEsq = document.getElementById("meiEsq").innerText;
+        var meiMei = document.getElementById("meiMei").innerText;
+        var meiDir = document.getElementById("meiDir").innerText;
+        var infEsq = document.getElementById("infEsq").innerText;
+        var infMei = document.getElementById("infMei").innerText;
+        var infDir = document.getElementById("infDir").innerText;
+        var quemEJogador1 = document.getElementById("quemSouJogador1").value;
+        var quemEJogador2 = document.getElementById("quemSouJogador2").value;
+        //possibilidades
+        if((supEsq == "X") && (supMei == "X") && (supDir == "X")) {
+            if(quemEJogador1 == "X") {pontosJogador1++;}
+            else if(quemEJogador2 == "X") {pontosJogador2++;}
+            destacar("supEsq", "supMei", "supDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        }
+        else if((supEsq == "O") && (supMei == "O") && (supDir == "O")) {
+            if(quemEJogador1 == "O") {pontosJogador1++;}
+            else if(quemEJogador2 == "O") {pontosJogador2++;}
+            destacar("supEsq", "supMei", "supDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        } //agora é outro
+        else if((supMei == "X") && (meiMei == "X") && (infMei == "X")) {
+            if(quemEJogador1 == "X") {pontosJogador1++;}
+            else if(quemEJogador2 == "X") {pontosJogador2++;}
+            destacar("supMei", "meiMei", "infMei");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        }
+        else if((supMei == "O") && (meiMei == "O") && (infMei == "O")) {
+            if(quemEJogador1 == "O") {pontosJogador1++;}
+            else if(quemEJogador2 == "O") {pontosJogador2++;}
+            destacar("supMei", "meiMei", "infMei");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        }//agora é outro
+        else if((meiEsq == "X") && (meiMei == "X") && (meiDir == "X")) {
+            if(quemEJogador1 == "X") {pontosJogador1++;}
+            else if(quemEJogador2 == "X") {pontosJogador2++;}
+            destacar("meiEsq", "meiMei", "meiDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        }
+        else if((meiEsq == "O") && (meiMei == "O") && (meiDir == "O")) {
+            if(quemEJogador1 == "O") {pontosJogador1++;}
+            else if(quemEJogador2 == "O") {pontosJogador2++;}
+            destacar("meiEsq", "meiMei", "meiDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        } //agora é outro
+        else if((infEsq == "X") && (meiMei == "X") && (supDir == "X")) {
+            if(quemEJogador1 == "X") {pontosJogador1++;}
+            else if(quemEJogador2 == "X") {pontosJogador2++;}
+            destacar("infEsq", "meiMei", "supDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        }
+        else if((infEsq == "O") && (meiMei == "O") && (supDir == "O")) {
+            if(quemEJogador1 == "O") {pontosJogador1++;}
+            else if(quemEJogador2 == "O") {pontosJogador2++;}
+            destacar("infEsq", "meiMei", "supDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        } //agora é outro
+        else if((supEsq == "X") && (meiMei == "X") && (infDir == "X")) {
+            if(quemEJogador1 == "X") {pontosJogador1++;}
+            else if(quemEJogador2 == "X") {pontosJogador2++;}
+            destacar("supEsq", "meiMei", "infDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        }
+        else if((supEsq == "O") && (meiMei == "O") && (infDir == "O")) {
+            if(quemEJogador1 == "O") {pontosJogador1++;}
+            else if(quemEJogador2 == "O") {pontosJogador2++;}
+            destacar("supEsq", "meiMei", "infDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        } //agora é outro
+        else if((supDir == "X") && (meiDir == "X") && (infDir == "X")) {
+            if(quemEJogador1 == "X") {pontosJogador1++;}
+            else if(quemEJogador2 == "X") {pontosJogador2++;}
+            destacar("supDir", "meiDir", "infDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        }
+        else if((supDir == "O") && (meiDir == "O") && (infDir == "O")) {
+            if(quemEJogador1 == "O") {pontosJogador1++;}
+            else if(quemEJogador2 == "O") {pontosJogador2++;}
+            destacar("supDir", "meiDir", "infDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        } //agora é outro
+        else if((supEsq == "X") && (meiEsq == "X") && (infEsq == "X")) {
+            if(quemEJogador1 == "X") {pontosJogador1++;}
+            else if(quemEJogador2 == "X") {pontosJogador2++;}
+            destacar("supEsq", "meiEsq", "infEsq");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        }
+        else if((supEsq == "O") && (meiEsq == "O") && (infEsq == "O")) {
+            if(quemEJogador1 == "O") {pontosJogador1++;}
+            else if(quemEJogador2 == "O") {pontosJogador2++;}
+            destacar("supEsq", "meiEsq", "infEsq");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        } //agora é outro
+        else if((infEsq == "X") && (infMei == "X") && (infDir == "X")) {
+            if(quemEJogador1 == "X") {pontosJogador1++;}
+            else if(quemEJogador2 == "X") {pontosJogador2++;}
+            destacar("infEsq", "infMei", "infDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        }
+        else if((infEsq == "O") && (infMei == "O") && (infDir == "O")) {
+            if(quemEJogador1 == "O") {pontosJogador1++;}
+            else if(quemEJogador2 == "O") {pontosJogador2++;}
+            destacar("infEsq", "infMei", "infDir");
+            setTimeout(mostrarPontosERecomecar, 1500);
+        }
+        else {
+            var all = ["supEsq", "supMei", "supDir", "meiEsq", "meiMei", "meiDir", "infEsq", "infMei", "infDir"];
+            var verificar = 0;
+            for(a of all) { if(document.getElementById(a).innerText != "--") { verificar++; } }
+            if(verificar >= 9) {
+        for(x of all) {
+            for(n of all) { document.getElementById(n).style.color = "pink"; }//Transforma tudo em rosa
+        }
+        setTimeout(function() { for(c of all ) { document.getElementById(c).style.color = "white"; } mostrarPontosERecomecar();}, 1500);
+        }
+    }
+    }
+</script>
+</html>
